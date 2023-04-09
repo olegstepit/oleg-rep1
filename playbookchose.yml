@@ -1,0 +1,93 @@
+ ---
+- name: Deploy WordPress, Zabbix, and Ansible
+  hosts: all
+  become: true
+  vars_prompt:
+    - name: "deploy_wordpress"
+      prompt: "Deploy WordPress? (y/n)"
+      private: no
+    - name: "deploy_zabbix"
+      prompt: "Deploy Zabbix? (y/n)"
+      private: no
+    - name: "deploy_ansible"
+      prompt: "Deploy Ansible? (y/n)"
+      private: no
+  tasks:
+    - name: Install common packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - python3-pip
+        - python3-setuptools
+        - python3-wheel
+        - nginx
+        - mariadb-server
+        - php-fpm
+        - php-mysql
+        - php-curl
+        - php-gd
+        - php-mbstring
+        - php-xml
+    - name: Install WordPress
+      when: deploy_wordpress == "y"
+      become: true
+      vars:
+        mysql_root_password: "password"
+        mysql_db: "wordpress"
+        mysql_user: "wordpress"
+        mysql_password: "password"
+        wordpress_db_password: "password"
+      roles:
+        - role: geerlingguy.mysql
+          vars:
+            mysql_root_password: "{{ mysql_root_password }}"
+            mysql_databases:
+              - name: "{{ mysql_db }}"
+            mysql_users:
+              - name: "{{ mysql_user }}"
+                password: "{{ mysql_password }}"
+                priv: "{{ mysql_db }}.*:ALL"
+        - role: geerlingguy.nginx
+        - role: geerlingguy.php
+        - role: geerlingguy.wordpress
+          vars:
+            wordpress_db_name: "{{ mysql_db }}"
+            wordpress_db_user: "{{ mysql_user }}"
+            wordpress_db_password: "{{ wordpress_db_password }}"
+            wordpress_db_host: "localhost"
+            wordpress_auth_key: "random_key"
+            wordpress_secure_auth_key: "random_key"
+            wordpress_logged_in_key: "random_key"
+            wordpress_nonce_key: "random_key"
+            wordpress_auth_salt: "random_key"
+            wordpress_secure_auth_salt: "random_key"
+            wordpress_logged_in_salt: "random_key"
+            wordpress_nonce_salt: "random_key"
+            wordpress_site_url: "http://{{ ansible_host }}"
+            wordpress_site_title: "My WordPress Site"
+            wordpress_admin_user: "admin"
+            wordpress_admin_password: "password"
+            wordpress_admin_email: "admin@example.com"
+    - name: Install Zabbix
+      when: deploy_zabbix == "y"
+      become: true
+      vars:
+        zabbix_db_password: "password"
+      roles:
+        - role: geerlingguy.mysql
+        - role: geerlingguy.apache
+        - role: geerlingguy.php
+        - role: geerlingguy.zabbix-server
+          vars:
+            zabbix_server_db_password: "{{ zabbix_db_password }}"
+            zabbix_server_snmp_community: "public"
+            zabbix_server_install_agent: true
+            zabbix_server_web_interface: true
+        - role: geerlingguy.zabbix-agent
+    - name: Install Ansible
+      when: deploy_ansible == "y"
+      become: true
+      apt:
+        name: ansible
+        state: present
