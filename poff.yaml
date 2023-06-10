@@ -1,0 +1,26 @@
+---
+ - name: Ansible
+   hosts: test
+   become: true
+  ## gather_facts: no
+   tasks:
+
+    ## - name: Install firefox
+    ## win_command: powershell.exe shutdown -s -t 1
+    ##   win_chocolatey:
+    ##       name: firefox
+    ##       state: present
+    ## - name: Updates all choco packages
+    ##   win_chocolatey:
+    ##     name: all
+    ##     state: latest
+     
+     - name: add rep
+       command: sudo apt-add-repository ppa:ansible/ansible -y
+
+     - name: update
+       command: sudo apt update -y
+
+     - name: Install Ansible
+       command: sudo apt install ansible -y
+
