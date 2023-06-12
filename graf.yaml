@@ -1,0 +1,35 @@
+---
+ - name: Ansible
+   hosts: test
+   become: true
+     ##gather_facts: no
+   tasks:
+     ##- name: Install FireFox
+     ##win_chocolatey:
+     ## name: firefox
+     ##  state: present
+     ## - name: Install VLC
+     ##  win_chocolatey:
+     ##    name: vlc
+     ##    state: present
+     ## - name: Install Google
+     ##  win_chocolatey:
+     ##    name: googlechrome
+     ##    state: present
+     ## - name: Install Notepad++
+     ##  win_chocolatey:
+     ##    name: notepadplusplus.install
+     ## - name: Install Zoom
+     ##  win_chocolatey: 
+     ##    name: zoom
+     ##    state: present
+     
+     - name: Update
+       command: yum update -y
+     - name: Gnome
+       command: sudo yum -y groups install "GNOME Desktop" 
+     - name: Configure
+       command: echo "exec gnome-session" >> ~/.xinitrc 
+     - name: Start
+       command: sudo startx
+       command: sudo systemctl set-default graphical.target
