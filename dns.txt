@@ -1,0 +1,36 @@
+ https://github.com/jj975/myhub.git
+https://hub.docker.com/repository/docker/oleg222/oleg1/general
+https://github.com/olegstepit/oleg-rep1
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+get-executionpolicy set  remotesigned
+ip addr | grep inet
+https://blogs.oracle.com/virtualization/post/install-microsoft-windows-11-on-virtualbox
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+
+
+
+gpedit.msc
+msconfig
+ipconfig
+sxstrace.exe
+chrome://flags/#automatic-password-generation
+https://www.bandicam.com/ru/screen-recorder/  
+
+wusa /uninstall /kb:971033
+wusa /uninstall /kb:2882822
+wusa /uninstall /kb:2872339
+
+Web of trust
+VirusTotal
+
+cat /etc/netplan/00-installer-config.yaml
+   sfc /scannow
+dism /online /cleanup-image /restorehealth
+
+powercfg /batteryreport
+
+
+gzip -9 file.txt
+
+docker run -d -p 80:80 wordpress
